@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Patient Dashboard — MediCare{% endblock %}
+{% set active = "dashboard" %}
+
+{% block content %}
+<div class="max-w-6xl">
+
+  <div class="mb-7">
+    <h1 class="text-2xl font-bold text-slate-800">Hello, {{ session.name }} 👋</h1>
+    <p class="text-slate-500 text-sm mt-1">Track your appointments and lab results here.</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid grid-cols-3 gap-4 mb-7">
+    <div class="card">
+      <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide">Appointments</p>
+      <p class="text-3xl font-bold text-slate-800 mt-2">{{ stats.total_appointments }}</p>
+    </div>
+    <div class="card">
+      <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide">Pending</p>
+      <p class="text-3xl font-bold text-amber-500 mt-2">{{ stats.pending }}</p>
+    </div>
+    <div class="card">
+      <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide">Lab Reports</p>
+      <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.reports }}</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+
+    <!-- Appointments -->
+    <div class="card">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="font-bold text-slate-800">My Appointments</h2>
+        <a href="/patient/book" class="btn text-xs px-3 py-1.5">+ Book</a>
+      </div>
+      {% if appointments %}
+      <div class="space-y-3">
+        {% for a in appointments %}
+        <div class="flex items-start justify-between p-4 bg-slate-50 rounded-xl">
+          <div>
+            <p class="font-semibold text-slate-800 text-sm">{{ a.doctor_name }}</p>
+            <p class="text-slate-400 text-xs mt-0.5">{{ a.specialization }}</p>
+            <p class="text-slate-500 text-xs mt-1">{{ a.date }} · {{ a.time_slot }}</p>
+            {% if a.reason %}<p class="text-slate-400 text-xs mt-1 italic">"{{ a.reason }}"</p>{% endif %}
+          </div>
+          <div class="flex flex-col items-end gap-2 ml-3">
+            <span class="badge-{{ a.status }} whitespace-nowrap">{{ a.status|capitalize }}</span>
+            {% if a.status == 'pending' %}
+            <form method="POST" action="/patient/appointment/{{ a.id }}/cancel"
+                  onsubmit="return confirm('Cancel this appointment?')">
+              <button type="submit"
+                class="text-xs text-red-500 hover:text-red-700 font-medium hover:underline transition">
+                Cancel
+              </button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-8 text-slate-400 text-sm">
+        No appointments yet.
+        <a href="/patient/book" class="text-blue-600 font-medium">Book one →</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Recent Reports -->
+    <div class="card">
+      <div class="flex justify-between items-center mb-5">
+        <h2 class="font-bold text-slate-800">Recent Lab Reports</h2>
+        <a href="/patient/reports" class="text-blue-600 text-xs font-medium hover:underline">View all →</a>
+      </div>
+      {% if reports %}
+      <div class="space-y-3">
+        {% for r in reports[:4] %}
+        <div class="p-4 bg-slate-50 rounded-xl">
+          <div class="flex justify-between items-start">
+            <p class="font-semibold text-slate-800 text-sm">{{ r.test_name }}</p>
+            <span class="text-slate-400 text-xs">{{ r.date }}</span>
+          </div>
+          <p class="text-slate-500 text-xs mt-1">{{ r.doctor_name }}</p>
+          <p class="text-slate-600 text-xs mt-2">
+            {{ r.result[:65] }}{% if r.result|length > 65 %}...{% endif %}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-8 text-slate-400 text-sm">No lab reports yet.</div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}

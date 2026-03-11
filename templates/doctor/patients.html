@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}My Patients — MediCare{% endblock %}
+{% set active = "patients" %}
+
+{% block content %}
+<div class="max-w-6xl">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-slate-800">My Patients</h1>
+    <p class="text-slate-500 text-sm mt-1">All patients who have booked appointments with you.</p>
+  </div>
+
+  <!-- Search bar -->
+  <div class="card mb-5">
+    <form method="GET" class="flex gap-3">
+      <input type="text" name="q" value="{{ query }}"
+        placeholder="Search by name, blood group, or phone..."
+        class="inp flex-1"/>
+      <button type="submit" class="btn px-5">Search</button>
+      {% if query %}
+        <a href="/doctor/patients" class="btn btn-white px-4 text-sm">Clear</a>
+      {% endif %}
+    </form>
+  </div>
+
+  <!-- Patient cards -->
+  {% if patients %}
+  <div class="grid grid-cols-3 gap-4">
+    {% for p in patients %}
+    <div class="card hover:shadow-md transition">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-11 h-11 bg-blue-100 rounded-xl flex items-center justify-center text-blue-700 font-bold text-lg">
+          {{ p.name[0].upper() }}
+        </div>
+        <div>
+          <p class="font-bold text-slate-800 text-sm">{{ p.name }}</p>
+          <p class="text-slate-400 text-xs truncate">{{ p.email }}</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-slate-400">Age</p>
+          <p class="font-semibold text-slate-700 mt-0.5">{{ p.age }} yrs</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-slate-400">Gender</p>
+          <p class="font-semibold text-slate-700 mt-0.5">{{ p.gender }}</p>
+        </div>
+        <div class="bg-red-50 rounded-xl p-3">
+          <p class="text-red-400">Blood Group</p>
+          <p class="font-bold text-red-600 mt-0.5">{{ p.blood_group }}</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-slate-400">Phone</p>
+          <p class="font-semibold text-slate-700 mt-0.5">{{ p.phone }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="card text-center py-14 text-slate-400">
+    <p class="text-4xl mb-3">👥</p>
+    <p class="font-medium">No patients found{% if query %} for "{{ query }}"{% endif %}.</p>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

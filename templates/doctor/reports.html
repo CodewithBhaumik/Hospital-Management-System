@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}All Reports — MediCare{% endblock %}
+{% set active = "reports" %}
+
+{% block content %}
+<div class="max-w-5xl">
+
+  <div class="flex justify-between items-center mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-slate-800">Test Reports</h1>
+      <p class="text-slate-500 text-sm mt-1">All lab reports you have uploaded.</p>
+    </div>
+    <a href="/doctor/add_report" class="btn text-sm px-4 py-2">+ Add Report</a>
+  </div>
+
+  {% if reports %}
+  <div class="space-y-4">
+    {% for r in reports %}
+    <div class="card hover:shadow-md transition">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">{{ r.test_name }}</span>
+        <span class="px-2 py-0.5 bg-red-50 text-red-600 text-xs font-bold rounded-md">{{ r.blood_group }}</span>
+        <span class="text-slate-400 text-xs ml-auto">{{ r.date }}</span>
+        <form method="POST" action="/doctor/report/{{ r.id }}/delete"
+              onsubmit="return confirm('Delete this report? This cannot be undone.')">
+          <button type="submit"
+            class="text-xs text-red-500 hover:text-red-700 font-medium hover:underline transition ml-2">
+            🗑 Delete
+          </button>
+        </form>
+      </div>
+      <p class="font-semibold text-slate-800 mb-3">{{ r.patient_name }}</p>
+      <div class="grid grid-cols-3 gap-3 text-sm">
+        <div class="bg-slate-50 rounded-xl p-3">
+          <p class="text-slate-400 text-xs mb-1">Result</p>
+          <p class="text-slate-700">{{ r.result }}</p>
+        </div>
+        <div class="bg-green-50 rounded-xl p-3">
+          <p class="text-green-600 text-xs mb-1">Normal Range</p>
+          <p class="text-slate-700">{{ r.normal_range or '—' }}</p>
+        </div>
+        <div class="bg-amber-50 rounded-xl p-3">
+          <p class="text-amber-600 text-xs mb-1">Remarks</p>
+          <p class="text-slate-700">{{ r.remarks or '—' }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {% else %}
+  <div class="card text-center py-14 text-slate-400">
+    <p class="text-4xl mb-3">📁</p>
+    <p class="font-medium">No reports uploaded yet.</p>
+    <a href="/doctor/add_report" class="btn text-sm px-5 py-2 mt-4 inline-block">Add First Report</a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Book Appointment — MediCare{% endblock %}
+{% set active = "book" %}
+
+{% block content %}
+<div class="max-w-2xl">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-slate-800">Book an Appointment</h1>
+    <p class="text-slate-500 text-sm mt-1">Schedule a visit with one of our doctors.</p>
+  </div>
+
+  <!-- Live doctor search — calls /api/doctors via Fetch API -->
+  <div class="card mb-5">
+    <label class="block text-sm font-medium text-slate-700 mb-1.5">🔍 Search Doctor (live)</label>
+    <input type="text" id="doctor-search"
+      placeholder="Type a name or specialization — e.g. Cardiology, Dr. Arjun"
+      class="inp" oninput="searchDoctors(this.value)"/>
+    <div id="search-results" class="mt-3 space-y-2 hidden"></div>
+  </div>
+
+  <!-- Booking form -->
+  <div class="card">
+    <form method="POST" class="space-y-5">
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Select Doctor</label>
+        <select name="doctor_id" id="doctor-select" required class="inp">
+          <option value="">-- Choose a doctor --</option>
+          {% for d in doctors %}
+          <option value="{{ d.id }}">{{ d.name }} — {{ d.specialization }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Date</label>
+          <input class="inp" type="date" name="date" required/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Time Slot</label>
+          <select name="time_slot" required class="inp">
+            <option value="">Select time</option>
+            <option>09:00 AM</option><option>10:00 AM</option>
+            <option>11:00 AM</option><option>12:00 PM</option>
+            <option>02:00 PM</option><option>03:00 PM</option>
+            <option>04:00 PM</option><option>05:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5">Reason for Visit</label>
+        <textarea class="inp resize-none" name="reason" rows="3" required
+          placeholder="Describe your symptoms or reason for the appointment..."></textarea>
+      </div>
+
+      <div class="flex gap-3 pt-1">
+        <button type="submit" class="btn px-5 py-2.5 text-sm">Confirm Booking</button>
+        <a href="/patient/dashboard" class="btn btn-white px-5 py-2.5 text-sm">Cancel</a>
+      </div>
+
+    </form>
+  </div>
+
+</div>
+
+<!-- Vanilla JS — Fetch API calls our /api/doctors JSON endpoint -->
+<script>
+async function searchDoctors(query) {
+  const resultsDiv = document.getElementById('search-results');
+
+  if (query.length < 2) {
+    resultsDiv.classList.add('hidden');
+    return;
+  }
+
+  const response = await fetch('/api/doctors?q=' + encodeURIComponent(query));
+  const doctors  = await response.json();
+
+  if (doctors.length === 0) {
+    resultsDiv.innerHTML = '<p class="text-slate-400 text-sm">No doctors found.</p>';
+  } else {
+    resultsDiv.innerHTML = doctors.map(d =>
+      `<div onclick="selectDoctor(${d.id}, '${d.name} — ${d.specialization}')"
+         class="p-3 bg-blue-50 border border-blue-100 rounded-xl cursor-pointer hover:bg-blue-100 transition">
+         <p class="font-semibold text-slate-800 text-sm">${d.name}</p>
+         <p class="text-blue-600 text-xs">${d.specialization}</p>
+       </div>`
+    ).join('');
+  }
+
+  resultsDiv.classList.remove('hidden');
+}
+
+function selectDoctor(id, label) {
+  document.getElementById('doctor-select').value = id;
+  document.getElementById('doctor-search').value  = label;
+  document.getElementById('search-results').classList.add('hidden');
+}
+</script>
+
+{% endblock %}

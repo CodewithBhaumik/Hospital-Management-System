@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register — MediCare</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>body{font-family:'Inter',sans-serif;} .inp{width:100%;border:1px solid #e2e8f0;border-radius:.75rem;padding:.6rem 1rem;font-size:.875rem;outline:none;} .inp:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.15);} .fade{animation:fadeIn .4s ease;} @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}</style>
+</head>
+<body class="fade">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for cat, msg in messages %}
+    <div class="fixed top-4 right-4 z-50 px-5 py-3 rounded-xl shadow-lg text-sm font-medium
+      {% if cat=='error' %}bg-red-500 text-white{% else %}bg-green-500 text-white{% endif %}">{{ msg }}</div>
+  {% endfor %}
+{% endwith %}
+
+<div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 flex items-center justify-center px-4 py-10">
+  <div class="w-full max-w-md">
+
+    <a href="/login/{{ role }}" class="flex items-center gap-2 text-slate-400 hover:text-white text-sm mb-8 transition">
+      ← Back to login
+    </a>
+
+    <div class="bg-white rounded-3xl shadow-2xl p-8">
+      <div class="text-center mb-7">
+        <h1 class="text-2xl font-bold text-slate-800">Create {{ role|capitalize }} Account</h1>
+        <p class="text-slate-500 text-sm mt-1">Join MediCare HMS</p>
+      </div>
+
+      <form method="POST" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
+          <input class="inp" type="text" name="name" required placeholder="Your full name"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+          <input class="inp" type="email" name="email" required placeholder="you@example.com"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+          <input class="inp" type="password" name="password" required placeholder="Min. 6 characters"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Phone</label>
+          <input class="inp" type="text" name="phone" required placeholder="10-digit mobile number"/>
+        </div>
+
+        {% if role == 'doctor' %}
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Specialization</label>
+          <select name="specialization" required class="inp">
+            <option value="">Select specialization</option>
+            <option>Cardiology</option>
+            <option>Neurology</option>
+            <option>Orthopedics</option>
+            <option>Dermatology</option>
+            <option>Pediatrics</option>
+            <option>General Medicine</option>
+            <option>Ophthalmology</option>
+            <option>ENT</option>
+          </select>
+        </div>
+
+        {% else %}
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Age</label>
+            <input class="inp" type="number" name="age" required placeholder="25"/>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 mb-1.5">Gender</label>
+            <select name="gender" required class="inp">
+              <option value="">Select</option>
+              <option>Male</option><option>Female</option><option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1.5">Blood Group</label>
+          <select name="blood_group" required class="inp">
+            <option value="">Select blood group</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option>
+            <option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        {% endif %}
+
+        <button type="submit"
+          class="w-full py-3 rounded-xl font-semibold text-white text-sm mt-1 transition
+            {% if role=='doctor' %}bg-blue-600 hover:bg-blue-700{% else %}bg-green-600 hover:bg-green-700{% endif %}">
+          Create Account →
+        </button>
+      </form>
+
+      <p class="text-center text-sm text-slate-500 mt-5">
+        Already registered?
+        <a href="/login/{{ role }}" class="text-blue-600 font-semibold hover:underline">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
