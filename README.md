@@ -1,21 +1,19 @@
 # 🏥 MediCare — Hospital Management System
 
-A full-stack web application built with **Python (Flask)**, **SQLite**, and **Tailwind CSS**.
+A full-stack web application for managing hospital appointments and patient records.
 
 ## Features
-- Role-based login for Doctors and Patients (SHA-256 hashing)
+- Role-based login for Doctors and Patients
 - Doctor: manage appointments, search patients, upload lab reports
-- Patient: book appointments with live doctor search, view lab reports, edit profile
-- RESTful JSON API endpoint for live doctor search via Fetch API
+- Patient: book appointments, view lab reports, edit profile
 
 ## Tech Stack
-Python, Flask, SQLite, Jinja2, Tailwind CSS, JavaScript
+Python, Flask, SQLite, Tailwind CSS, JavaScript
 
 ## Run Locally
-```bash
 pip install flask
 python app.py
-```
+
 Open → http://127.0.0.1:5000
 
 ## Demo Logins
@@ -25,21 +23,12 @@ Open → http://127.0.0.1:5000
 | Patient | amit@gmail.com | patient123 |
 
 ## Project Structure
-```
 ├── app.py          # All Flask routes
 ├── database.py     # Schema, DB connection, seed data
 ├── requirements.txt
 └── templates/
-    ├── base.html           # Shared sidebar layout
-    ├── index.html          # Landing page
-    ├── auth/login.html
-    ├── auth/register.html
-    ├── doctor/dashboard.html
-    ├── doctor/patients.html
-    ├── doctor/add_report.html
-    ├── doctor/reports.html
-    ├── patient/dashboard.html
-    ├── patient/book.html
-    ├── patient/reports.html
-    └── patient/profile.html
-```
+    ├── base.html
+    ├── index.html
+    ├── auth/
+    ├── doctor/
+    └── patient/
