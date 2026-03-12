@@ -4,10 +4,10 @@ from database import init_db, get_db, hash_password
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = "hms_dev_secret_key"   # change this before deploying
+app.secret_key = "hms_dev_secret_key"  
 
 
-# ── open one DB connection per request, close it after ───────────────────────
+# open one DB connection per request, close it after 
 @app.teardown_appcontext
 def close_db(_):
     db = getattr(g, "_db", None)
@@ -20,22 +20,18 @@ def db():
     return g._db
 
 
-# ── tiny helper so every route stays clean ───────────────────────────────────
+# helper for clean routing 
 def role_required(role):
     return session.get("role") == role
 
 
-# =============================================================================
 #  LANDING
-# =============================================================================
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
-# =============================================================================
 #  AUTH
-# =============================================================================
 @app.route("/login/<role>", methods=["GET", "POST"])
 def login(role):
     if role not in ("doctor", "patient"):
@@ -103,9 +99,7 @@ def logout():
     return redirect(url_for("index"))
 
 
-# =============================================================================
 #  DOCTOR ROUTES
-# =============================================================================
 @app.route("/doctor/dashboard")
 def doctor_dashboard():
     if not role_required("doctor"):
@@ -216,9 +210,7 @@ def doctor_reports():
     return render_template("doctor/reports.html", reports=reports)
 
 
-# =============================================================================
 #  PATIENT ROUTES
-# =============================================================================
 @app.route("/patient/dashboard")
 def patient_dashboard():
     if not role_required("patient"):
@@ -308,10 +300,7 @@ def patient_profile():
     ).fetchone()
     return render_template("patient/profile.html", patient=patient)
 
-
-# =============================================================================
 #  PATIENT — cancel appointment
-# =============================================================================
 @app.route("/patient/appointment/<int:appt_id>/cancel", methods=["POST"])
 def cancel_appointment(appt_id):
     if not role_required("patient"):
@@ -332,9 +321,7 @@ def cancel_appointment(appt_id):
     return redirect(url_for("patient_dashboard"))
 
 
-# =============================================================================
 #  DOCTOR — delete wrong report
-# =============================================================================
 @app.route("/doctor/report/<int:report_id>/delete", methods=["POST"])
 def delete_report(report_id):
     if not role_required("doctor"):
@@ -353,9 +340,7 @@ def delete_report(report_id):
     return redirect(url_for("doctor_reports"))
 
 
-# =============================================================================
-#  JSON API  — used by the live doctor-search in JavaScript (Fetch API)
-# =============================================================================
+#  JSON API — live doctor-search (Fetch API)
 @app.route("/api/doctors")
 def api_doctors():
     q    = request.args.get("q", "")
@@ -366,7 +351,6 @@ def api_doctors():
     return jsonify([dict(r) for r in rows])
 
 
-# =============================================================================
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)

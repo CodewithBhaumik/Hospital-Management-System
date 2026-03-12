@@ -19,11 +19,11 @@ def hash_password(password):
 
 
 def init_db():
-    """Create tables and seed demo data on first run."""
+    # Create tables and sample demo data on first run only.
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
 
-    # ── Create tables (3NF normalised schema) ────────────────────────────────
+    # Create tables 
     conn.executescript("""
         CREATE TABLE IF NOT EXISTS doctors (
             id             INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,7 +72,7 @@ def init_db():
         );
     """)
 
-    # ── Seed doctors ──────────────────────────────────────────────────────────
+    #Sample doctors 
     doctors = [
         ("Dr. Arjun Mehta",  "arjun@hospital.com",  hash_password("doctor123"), "Cardiology",    "9876543210"),
         ("Dr. Priya Sharma", "priya@hospital.com",  hash_password("doctor123"), "Neurology",     "9876543211"),
@@ -86,7 +86,7 @@ def init_db():
         except Exception:
             pass   # skip if already seeded
 
-    # ── Seed patients ─────────────────────────────────────────────────────────
+    #Sample patients
     patients = [
         ("Amit Singh",  "amit@gmail.com",  hash_password("patient123"), 22, "Male",   "9123456789", "O+"),
         ("Sneha Patel", "sneha@gmail.com", hash_password("patient123"), 28, "Female", "9123456790", "B+"),
@@ -98,7 +98,7 @@ def init_db():
         except Exception:
             pass
 
-    # ── Seed appointments ─────────────────────────────────────────────────────
+    #Sample appointments
     appointments = [
         (1, 1, "2025-06-10", "10:00 AM", "Chest pain checkup",     "completed", "ECG done. Prescribed rest."),
         (2, 2, "2025-06-12", "11:30 AM", "Headache and dizziness", "pending",   ""),
@@ -112,7 +112,7 @@ def init_db():
         except Exception:
             pass
 
-    # ── Seed test reports ─────────────────────────────────────────────────────
+    # Sample test reports 
     reports = [
         (1, 1, "Complete Blood Count (CBC)", "Hemoglobin: 13.5 g/dL, WBC: 7200/uL", "Hb: 12-17 g/dL",   "All values within normal range.",      "2025-06-10"),
         (1, 1, "ECG",                        "Normal Sinus Rhythm, HR: 72 bpm",      "Normal",            "No cardiac abnormalities detected.",   "2025-06-10"),
