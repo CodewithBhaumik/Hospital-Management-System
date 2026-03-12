@@ -4,11 +4,11 @@ A full-stack web application for managing hospital appointments and patient reco
 
 ## Features
 - Role-based login for Doctors and Patients
-- Doctor: manage appointments, search patients, upload lab reports
-- Patient: book appointments, view lab reports, edit profile
+- Doctor: manage appointments, search patients, upload lab reports, delete wrong reports
+- Patient: book appointments, cancel pending appointments, view lab reports, edit profile
 
 ## Tech Stack
-Python, Flask, SQLite, Tailwind CSS, JavaScript
+Python, Flask, SQLite, HTML, CSS, Tailwind CSS, JavaScript
 
 ## Run Locally
 pip install flask
@@ -17,14 +17,17 @@ python app.py
 Open → http://127.0.0.1:5000
 
 ## Demo Logins
-| Role | Email | Password |
-|------|-------|----------|
-| Doctor | arjun@hospital.com | doctor123 |
-| Patient | amit@gmail.com | patient123 |
+| Role    | Email               | Password   |
+|---------|---------------------|------------|
+| Doctor  | arjun@hospital.com  | doctor123  |
+| Patient | amit@gmail.com      | patient123 |
+
+## Reset Data
+Delete instance/hospital.db and run python app.py again.
 
 ## Project Structure
-├── app.py          # All Flask routes
-├── database.py     # Schema, DB connection, seed data
+├── app.py
+├── database.py
 ├── requirements.txt
 └── templates/
     ├── base.html

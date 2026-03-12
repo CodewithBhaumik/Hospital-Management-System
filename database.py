@@ -75,6 +75,9 @@ def init_db():
     # ── Seed doctors ──────────────────────────────────────────────────────────
     doctors = [
         ("Dr. Arjun Mehta",  "arjun@hospital.com",  hash_password("doctor123"), "Cardiology",    "9876543210"),
+        ("Dr. Priya Sharma", "priya@hospital.com",  hash_password("doctor123"), "Neurology",     "9876543211"),
+        ("Dr. Ravi Kumar",   "ravi@hospital.com",   hash_password("doctor123"), "Orthopedics",   "9876543212"),
+        ("Dr. Neha Gupta",   "neha@hospital.com",   hash_password("doctor123"), "Dermatology",   "9876543213"),
     ]
     for d in doctors:
         try:
@@ -85,7 +88,8 @@ def init_db():
 
     # ── Seed patients ─────────────────────────────────────────────────────────
     patients = [
-        ("Amit Singh", "amit@gmail.com", hash_password("patient123"), 22, "Male", "9123456789", "O+"),
+        ("Amit Singh",  "amit@gmail.com",  hash_password("patient123"), 22, "Male",   "9123456789", "O+"),
+        ("Sneha Patel", "sneha@gmail.com", hash_password("patient123"), 28, "Female", "9123456790", "B+"),
     ]
     for p in patients:
         try:
@@ -96,7 +100,10 @@ def init_db():
 
     # ── Seed appointments ─────────────────────────────────────────────────────
     appointments = [
-        (1, 1, "2025-06-10", "10:00 AM", "Chest pain checkup", "completed", "ECG done. Prescribed rest."),
+        (1, 1, "2025-06-10", "10:00 AM", "Chest pain checkup",     "completed", "ECG done. Prescribed rest."),
+        (2, 2, "2025-06-12", "11:30 AM", "Headache and dizziness", "pending",   ""),
+        (1, 3, "2025-06-15", "02:00 PM", "Knee pain",              "pending",   ""),
+        (2, 1, "2025-06-18", "09:00 AM", "Routine checkup",        "cancelled", "Patient cancelled."),
     ]
     for a in appointments:
         try:
@@ -107,8 +114,10 @@ def init_db():
 
     # ── Seed test reports ─────────────────────────────────────────────────────
     reports = [
-        (1, 1, "Complete Blood Count (CBC)", "Hemoglobin: 13.5 g/dL, WBC: 7200/uL", "Hb: 12-17 g/dL", "All values within normal range.", "2025-06-10"),
-        (1, 1, "ECG",                        "Normal Sinus Rhythm, HR: 72 bpm",      "Normal",          "No cardiac abnormalities detected.", "2025-06-10"),
+        (1, 1, "Complete Blood Count (CBC)", "Hemoglobin: 13.5 g/dL, WBC: 7200/uL", "Hb: 12-17 g/dL",   "All values within normal range.",      "2025-06-10"),
+        (1, 1, "ECG",                        "Normal Sinus Rhythm, HR: 72 bpm",      "Normal",            "No cardiac abnormalities detected.",   "2025-06-10"),
+        (2, 2, "MRI Brain",                  "No lesions or abnormalities",          "Clear",             "Mild tension headache. Rest advised.", "2025-06-12"),
+        (2, 2, "Blood Pressure",             "120/80 mmHg",                          "90/60-120/80 mmHg", "Normal. No hypertension.",             "2025-06-12"),
     ]
     for r in reports:
         try:
